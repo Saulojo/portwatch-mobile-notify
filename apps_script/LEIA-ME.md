@@ -38,7 +38,16 @@ Para conferir, clique no ícone de **relógio (Acionadores)** na barra da esquer
 No topo do código também dá para mudar `INTERVALO_MINUTOS` (1, 5, 10, 15 ou 30) e
 `AVISAR_QUANDO_SO_FPS_MUDA`. Depois de mudar o intervalo, rode `instalarGatilho` de novo.
 
+## Atualizar o código
+
+1. No editor, copie as duas linhas `TELEGRAM_BOT_TOKEN` e `TELEGRAM_CHAT_ID` para não perdê-las.
+2. Apague tudo, cole o novo `Code.gs` e coloque as duas linhas de volta.
+3. Salve. O gatilho continua o mesmo; não precisa rodar `instalarGatilho` de novo.
+
 ## Observações
+
+- Resumo, "o que funciona" e "o que está travando" vêm em inglês do site e são traduzidos
+  pelo Google Tradutor (`TRADUZIR_PARA_PORTUGUES`). Se a tradução falhar, vão em inglês.
 
 - Se o site ficar fora do ar, o script só registra o erro e tenta de novo na próxima execução.
 - Se o Telegram recusar a mensagem (token ou chat_id errado), a execução falha e o Google

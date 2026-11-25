@@ -14,6 +14,7 @@ const TELEGRAM_BOT_TOKEN = 'COLE_AQUI_O_TOKEN_DO_BOT';
 const TELEGRAM_CHAT_ID = 'COLE_AQUI_O_CHAT_ID';
 const INTERVALO_MINUTOS = 5;          // 1, 5, 10, 15 ou 30
 const AVISAR_QUANDO_SO_FPS_MUDA = false;
+const TRADUZIR_PARA_PORTUGUES = true;  // o site escreve os detalhes em inglês; traduz com o Google Tradutor
 
 const BASE_URL = 'https://portwatch-vi.xyz';
 const STATE_KEY = 'portwatch_state';
@@ -167,6 +168,20 @@ function stabilityLabel_(v) {
   return STABILITY[best][0];
 }
 
+// Traduz um texto do inglês para o português. Se o tradutor falhar, devolve o original.
+function tr_(text) {
+  if (!TRADUZIR_PARA_PORTUGUES || !text) return text;
+  try {
+    const out = LanguageApp.translate(String(text), 'en', 'pt');
+    if (!out) return text;
+    // o tradutor às vezes devolve entidades HTML (&#39; &quot;); volta para texto puro
+    return out.replace(/&#39;/g, "'").replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+  } catch (err) {
+    Logger.log('Tradução falhou, mantendo em inglês: ' + err);
+    return text;
+  }
+}
+
 const num_ = (x) => String(Math.round(x * 10) / 10);
 const pct_ = (x) => num_(x) + '%';
 const esc_ = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -205,8 +220,8 @@ function buildMessage_(tracker, ranked, prev, isTest) {
     L.push('🏆 <b>' + esc_(name) + '</b> · versão privada (sem código público)');
   }
   const meta = [MILESTONE_LABEL[lead.reached] || lead.reached];
-  if (e.approach) meta.push(e.approach);
-  if (e.target) meta.push(e.target);
+  if (e.approach) meta.push(tr_(e.approach));
+  if (e.target) meta.push(tr_(e.target));
   const ver = { portwatch: 'Verificado pelo PortWatch', 'self-reported': 'Autodeclarado' }[e.verification];
   if (ver) meta.push(ver);
   L.push('<i>' + esc_(meta.join(' · ')) + '</i>');
@@ -220,19 +235,19 @@ function buildMessage_(tracker, ranked, prev, isTest) {
     L.push('');
   }
 
-  if (e.summary) { L.push(esc_(e.summary)); L.push(''); }
+  if (e.summary) { L.push(esc_(tr_(e.summary))); L.push(''); }
   if (e.highlights && e.highlights.length) {
     L.push('✅ <b>O que funciona</b>');
-    e.highlights.forEach((h) => L.push('• ' + esc_(h)));
+    e.highlights.forEach((h) => L.push('• ' + esc_(tr_(h))));
     L.push('');
   }
   if (e.blockers && e.blockers.length) {
     L.push('❌ <b>O que está travando</b>');
-    e.blockers.forEach((b) => L.push('• ' + esc_(b)));
+    e.blockers.forEach((b) => L.push('• ' + esc_(tr_(b))));
     L.push('');
   }
   if (e.proof && e.proof.url) {
-    L.push('🎬 <a href="' + attr_(e.proof.url) + '">' + esc_(e.proof.label || 'Prova') + '</a>');
+    L.push('🎬 <a href="' + attr_(e.proof.url) + '">' + esc_(tr_(e.proof.label) || 'Prova') + '</a>');
   }
 
   L.push('');
