@@ -7,6 +7,10 @@ A mensagem traz: porcentagem (antes → depois), projeto e repositório, etapa (
 história, gráficos, **FPS**, estabilidade, resumo, **o que funciona**, **o que está travando**,
 link de prova (vídeo/post) e o top 3.
 
+> **Forma recomendada de rodar sem deixar o PC ligado:** Google Apps Script. Veja
+> [apps_script/LEIA-ME.md](apps_script/LEIA-ME.md). O workflow do GitHub Actions abaixo foi
+> desativado porque o agendador do GitHub nunca disparou neste repositório.
+
 Não precisa instalar nada além do Python. O script lê o mesmo arquivo de dados que o site
 usa (`/data/tracker.json`) e calcula a porcentagem com a mesma fórmula do site.
 
