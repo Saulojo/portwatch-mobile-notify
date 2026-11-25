@@ -69,3 +69,27 @@ Observações:
 - Se o repositório ficar 60 dias sem nenhum commit, o GitHub pausa o agendamento. Os commits
   do `state.json` a cada mudança do líder normalmente evitam isso; se pausar, é só reativar na aba Actions.
 - Se usar a nuvem, pare o `iniciar.bat` no PC para não receber mensagens repetidas.
+
+### Se o agendamento do GitHub não disparar: cron-job.org
+
+O agendador do GitHub é "melhor esforço" e pode simplesmente não rodar. Neste repositório ele
+nunca disparou, mas o disparo manual funciona. Então um serviço externo e gratuito chama o
+disparo a cada 5 minutos:
+
+1. **Token do GitHub:** em GitHub → Settings → Developer settings → Personal access tokens →
+   **Fine-grained tokens** → Generate new token.
+   - Repository access: *Only select repositories* → `portwatch-mobile-notify`
+   - Permissions → Repository permissions → **Actions: Read and write**
+   - Copie o token gerado.
+2. **cron-job.org:** crie uma conta gratuita em https://cron-job.org e clique em *Create cronjob*:
+   - URL: `https://api.github.com/repos/Saulojo/portwatch-mobile-notify/actions/workflows/portwatch.yml/dispatches`
+   - Execution schedule: a cada 5 minutos
+   - Aba *Advanced*:
+     - Request method: **POST**
+     - Headers:
+       - `Authorization`: `Bearer SEU_TOKEN`
+       - `Accept`: `application/vnd.github+json`
+       - `Content-Type`: `application/json`
+     - Request body: `{"ref":"main"}`
+3. Salve e clique em *Test run*. A resposta certa é **204 No Content**, e uma nova execução
+   aparece na aba Actions do repositório.
