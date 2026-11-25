@@ -1,0 +1,6 @@
+{
+  "telegram_bot_token": "COLE_AQUI_O_TOKEN_DO_BOTFATHER",
+  "telegram_chat_id": "",
+  "interval_seconds": 300,
+  "notify_on_fps_change": false
+}

@@ -1,0 +1,4 @@
+config.json
+*.tmp
+_test_state.json
+__pycache__/
